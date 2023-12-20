@@ -10,7 +10,7 @@
     </head>
     <body class="antialiased">
      <div id="app">
-        <Test />
+        <router-view />
      </div>
     </body>
 </html>
