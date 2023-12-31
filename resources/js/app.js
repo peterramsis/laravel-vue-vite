@@ -1,9 +1,12 @@
-import './bootstrap';
-import { createApp } from 'vue/dist/vue.esm-bundler.js';
-import Test from "./component/Test.vue";
-import router from './router/index';
+import "./bootstrap";
+import { createApp } from "vue/dist/vue.esm-bundler.js";
+import HeaderApp from "./component/header_app.vue";
 
-const app = createApp()
+import router from "./router/index";
+import "./bootstrap";
+
+import "../sass/app.scss";
+const app = createApp();
+app.component("header-app", HeaderApp);
 app.use(router);
-app.mount("#app")
-
+app.mount("#app");
