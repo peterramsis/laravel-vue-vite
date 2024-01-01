@@ -12,7 +12,8 @@ class PostController extends Controller
      */
     public function index()
     {
-        //
+        $data = Post::all();
+        return response()->json([ "posts" => $data ],200);
     }
 
     /**
@@ -52,7 +53,12 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        //
+        $post = Post::find($request->id);
+        $post->title = $request->title;
+        $post->body = $request->body;
+        $post->save();
+
+        return response()->json(["status" =>  true],200);
     }
 
     /**
