@@ -24,3 +24,7 @@ Route::resource("posts" , App\Http\Controllers\PostController::class);
 
 Route::post("register", [App\Http\Controllers\UserAuthController::class, "register"]);
 Route::post("login", [App\Http\Controllers\UserAuthController::class, "login"]);
+
+Route::post("switchLanguage", [App\Http\Controllers\LanguageController::class, "switchLanguage"]);
+
+Route::get("getLan", [App\Http\Controllers\LanguageController::class, "getLanguage"]);

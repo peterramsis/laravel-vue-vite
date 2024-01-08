@@ -21,13 +21,12 @@
               </li>
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  Dropdown
+                  switch language
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <li><a class="dropdown-item" href="#">Action</a></li>
-                  <li><a class="dropdown-item" href="#">Another action</a></li>
-                  <li><hr class="dropdown-divider"></li>
-                  <li><a class="dropdown-item" href="#">Something else here</a></li>
+                  <li><a class="dropdown-item"  @click="switchLan('ar')">Arabic</a></li>
+                  <li><a class="dropdown-item"  @click="switchLan('en')">English</a></li>
+
                 </ul>
               </li>
 
@@ -47,6 +46,17 @@ export default {
     },
     mounted(){
         this.token = localStorage.getItem("token");
+    },
+    methods:{
+        switchLan(language){
+          axios.post("api/switchLanguage" , {
+            language: language
+          }).then( res => {
+                window.location.reload();
+          }).catch( res => {
+
+          })
+        }
     }
 
 }

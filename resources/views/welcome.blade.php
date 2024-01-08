@@ -9,6 +9,8 @@
         @vite('resources/js/app.js')
     </head>
     <body class="antialiased">
+
+        {{ app()->getLocale() }}
      <div id="app">
         <router-view />
 
