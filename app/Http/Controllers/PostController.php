@@ -13,8 +13,8 @@ class PostController extends Controller
      */
     public function index()
     {
-        $data = Post::all();
-        return response()->json([ "posts" => $data ],200);
+        $data = Post::orderBy("id" , "desc")->paginate(4);
+       return response()->json($data,200);
     }
 
     /**
@@ -72,8 +72,11 @@ class PostController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Post $post)
+public function destroy($id)
     {
-        //
+       $post = Post::find($id);
+       $post->delete();
+
+       return response()->json(["status" =>  true],200);
     }
 }

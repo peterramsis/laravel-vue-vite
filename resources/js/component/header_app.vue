@@ -7,13 +7,16 @@
           </button>
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav m-auto mb-2 mb-lg-0">
-              <li class="nav-item">
-                <router-link class="nav-link" to="/" exact>Home</router-link>
+              <li class="nav-item" v-if="!token">
+                <router-link class="nav-link" to="/" exact>Register</router-link>
+              </li>
+              <li class="nav-item" v-if="!token">
+                <router-link class="nav-link" to="/login" exact>Login</router-link>
               </li>
               <li class="nav-item">
                 <router-link class="nav-link" to="/about">About</router-link>
               </li>
-              <li class="nav-item">
+              <li class="nav-item" v-if="token">
                 <router-link class="nav-link" to="/posts">Posts</router-link>
               </li>
               <li class="nav-item dropdown">
@@ -36,6 +39,15 @@
 
 <script>
 export default {
-    name:"header-app"
+    name:"header-app",
+    data(){
+        return{
+           token: ""
+        }
+    },
+    mounted(){
+        this.token = localStorage.getItem("token");
+    }
+
 }
 </script>
