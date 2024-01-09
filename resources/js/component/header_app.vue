@@ -7,11 +7,11 @@
           </button>
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav m-auto mb-2 mb-lg-0">
-              <li class="nav-item" v-if="!token">
-                <router-link class="nav-link" to="/" exact>Register</router-link>
+              <li class="nav-item" v-if="token == '' ">
+                <router-link class="nav-link" to="/" exact> {{ $t("register") }} {{ token }} </router-link>
               </li>
               <li class="nav-item" v-if="!token">
-                <router-link class="nav-link" to="/login" exact>Login</router-link>
+                <router-link class="nav-link" to="/login" exact>{{ $t("login") }}</router-link>
               </li>
               <li class="nav-item">
                 <router-link class="nav-link" to="/about">About</router-link>
@@ -46,18 +46,28 @@ export default {
     },
     mounted(){
         this.token = localStorage.getItem("token");
+        this.$i18n.locale = localStorage.getItem("lan") ?? "en";
     },
     methods:{
         switchLan(language){
+
+            this.$i18n.locale = language;
           axios.post("api/switchLanguage" , {
             language: language
           }).then( res => {
-                window.location.reload();
+
+            localStorage.setItem("lan" , language);
+            // console.log(i18n.global.locale.value);
+            // Add set locale from vee validate
+
+             window.location.reload();
           }).catch( res => {
 
           })
+
         }
-    }
+    },
+
 
 }
 </script>

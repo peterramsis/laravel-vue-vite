@@ -52,14 +52,14 @@ const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes,
 });
-
 router.beforeEach((to, from, next) => {
     document.title = to.meta?.title ?? "System";
-    // Continue resolving the route
+
+    const token = localStorage.getItem("token");
+    const isAuthenticated = token !== null;
 
     if (to.meta.requiresAuth) {
-        const token = localStorage.getItem("token");
-        if (token) {
+        if (isAuthenticated) {
             // User is authenticated, proceed to the route
             next();
         } else {
@@ -68,8 +68,15 @@ router.beforeEach((to, from, next) => {
         }
     } else {
         // Non-protected route, allow access
-        next();
+        if (
+            (isAuthenticated && to.path === "/login") ||
+            to.path === "/register"
+        ) {
+            // If the user is already authenticated and tries to access the login page, redirect to home
+            next("/home");
+        } else {
+            next();
+        }
     }
 });
-
 export default router;
