@@ -3,6 +3,8 @@
         <header-app></header-app>
         <router-view></router-view>
 
+
+
         <div class="container">
             <h2 class="text-center">Register</h2>
 

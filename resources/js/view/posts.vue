@@ -64,7 +64,7 @@
 
 
                     <tbody>
-                        <tr v-for="post in posts.data" :key="post.id">
+                        <tr v-for="post in $store.getters.getPosts.data" :key="post.id">
                             <td >{{ post.title }}</td>
                             <td> {{ post.body }} </td>
 
@@ -118,11 +118,18 @@
 
 
 
-                <Bootstrap5Pagination
-                :data="posts"
-                    @pagination-change-page="getPost"
-                />
+                    <Bootstrap5Pagination
+                    :data="$store.getters.getPosts"
+                    @pagination-change-page="handlePaginationChange"
+
+                >
+                <slot name="prev-nav">&lt; Previous</slot>
+                <slot name="next-nav">Next &gt;</slot>
+
+                </Bootstrap5Pagination>
               </div>
+
+
 
 
 
@@ -135,16 +142,17 @@
 
 <script>
 
+
 export default{
     data(){
         return{
-
+           page : 1,
            post:  {
                 id: "",
                 title: "",
                  body: "",
             },
-            posts: [],
+
             errors:[],
             hideModelCreate: true
         }
@@ -152,7 +160,14 @@ export default{
     mounted(){
 
     },
+    computed:{
+
+    },
     methods:{
+        handlePaginationChange(newPage) {
+        const loading = this.$loading;
+        this.$store.dispatch("getPostsAction", { page: newPage, loading });
+    },
 
         showModelPost(){
             this.hideModelCreate =! this.hideModelCreate;
@@ -200,7 +215,18 @@ export default{
 
         },
         updatePost(post){
-            console.log(post);
+            let loader = this.$loading.show({
+                    // Optional parameters
+                    container: this.fullPage ? null : this.$refs.formContainer,
+                    canCancel: true,
+                    onCancel: this.onCancel,
+                    color: "blue",
+                    backgroundColor: "#ccc",
+                    width:200,
+                    height:200,
+                    loader: 'bars',
+
+                });
 
             axios.put('/api/posts/'+post.id,{
                 title: post.title,
@@ -215,19 +241,31 @@ export default{
                     showConfirmButton: false,
                     timer: 1500
                  });
-
-
+                 loader.hide()
                }
             });
         },
-        getPost(page = 1){
-            axios.get(`/api/posts?page=${page}`).then(res=>{
+        // getPost(page = 1){
+
+        //     let loader = this.$loading.show({
+        //             // Optional parameters
+        //             container: this.fullPage ? null : this.$refs.formContainer,
+        //             canCancel: true,
+        //             onCancel: this.onCancel,
+        //             color: "blue",
+        //             backgroundColor: "#ccc",
+        //             width:200,
+        //             height:200,
+        //             loader: 'bars',
+
+        //         });
+        //     axios.get(`/api/posts?page=${page}`).then(res=>{
 
 
-            this.posts = res.data;
-
-            })
-        },
+        //     this.posts = res.data;
+        //     loader.hide()
+        //     })
+        // },
         createPost(e){
             e.preventDefault();
 
@@ -255,7 +293,9 @@ export default{
         }
     },
     created(){
-        this.getPost()
+        const page = 1;
+    let loading = this.$loading;
+    this.$store.dispatch("getPostsAction", { page, loading });
     }
 }
 
