@@ -28,18 +28,19 @@
                        <form  @submit="createPost">
                           <div class="form-group">
                             <label for="my-input">Title</label>
-                            <input class="form-control" type="text" name="title" v-model="post.title">
-                            <span v-if="errors.title" class="text-danger">{{errors.title[0]}}</span>
+                            <input class="form-control" type="text" name="title" v-model="$store.state.post.title">
+                            <span v-if="$store.state.errors.title" class="text-danger">{{$store.state.errors.title[0]}}</span>
+
                           </div>
 
                           <div class="form-group">
                             <label for="my-input">body</label>
-                            <input class="form-control" type="text" name="body" v-model="post.body">
-                            <span v-if="errors.body" class="text-danger">{{errors.body[0]}}</span>
+                            <input class="form-control" type="text" name="body" v-model="$store.state.post.body">
+                            <span v-if="$store.state.errors.body" class="text-danger">{{$store.state.errors.body[0]}}</span>
                           </div>
 
                           <div class="modal-footer">
-                            <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> -->
+                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                             <input type="submit" value="Save changes" class="btn btn-primary" name="submit">
                           </div>
                        </form>
@@ -245,57 +246,17 @@ export default{
                }
             });
         },
-        // getPost(page = 1){
-
-        //     let loader = this.$loading.show({
-        //             // Optional parameters
-        //             container: this.fullPage ? null : this.$refs.formContainer,
-        //             canCancel: true,
-        //             onCancel: this.onCancel,
-        //             color: "blue",
-        //             backgroundColor: "#ccc",
-        //             width:200,
-        //             height:200,
-        //             loader: 'bars',
-
-        //         });
-        //     axios.get(`/api/posts?page=${page}`).then(res=>{
-
-
-        //     this.posts = res.data;
-        //     loader.hide()
-        //     })
-        // },
         createPost(e){
             e.preventDefault();
-
-            axios.post('/api/posts', {
-                title: this.post.title,
-                body: this.post.body
-            }).then(res=>{
-
-                this.getPost();
-                this.errors = [];
-                this.title = ""
-                this.body = ""
-
-                this.$refs.myModal.style.display = "none";
-
-
-            }).catch((err)=>{
-
-                console.log(err);
-                if(err.response.status == 422){
-                    console.log(err.response.data);
-                   this.errors = err.response.data['errors'];
-                }
-            })
+            let loading = this.$loading;
+            const page = this.page;
+            this.$store.dispatch("createPostAction", {page ,loading});
         }
     },
     created(){
         const page = 1;
-    let loading = this.$loading;
-    this.$store.dispatch("getPostsAction", { page, loading });
+        let loading = this.$loading;
+        this.$store.dispatch("getPostsAction", { page, loading });
     }
 }
 

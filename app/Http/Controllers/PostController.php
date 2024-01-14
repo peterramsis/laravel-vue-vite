@@ -13,7 +13,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $data = Post::orderBy("id" , "desc")->paginate(1);
+        $data = Post::orderBy("id" , "desc")->paginate(4);
         return response()->json($data,200);
     }
 
